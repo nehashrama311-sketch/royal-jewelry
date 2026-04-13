@@ -1,154 +1,12 @@
 import React, { useState } from 'react';
 import './App.css';
 import { Login } from './component/Login/Login';
+import { Navbar } from './component/Navbar/Navbar';
+import { Hero } from './component/Hero/hero';
+import { StatsBar } from './component/Starbar/starbar';
+import { ProductDetails } from './component/Product details modal/Productdetails';
 import { products, categories, tagColors, formatINR } from './assets/product';
 import logo from '../src/assets/logo.png';
-
-// ─── NAVBAR ─────────────────────────────────────────────────────────────────
-const Navbar = ({ cartCount, page, setPage, user, onLogout }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  return (
-    <nav className="navbar">
-      <div className="logo" onClick={() => setPage('home')} style={{ cursor: 'pointer' }}>
-        <img src={logo} alt="Royals Jewellery" className="logo-img" />
-        <div className="logo-text">
-          <div className="logo-name">Royals</div>
-          <div className="logo-subtitle">Jewellery</div>
-        </div>
-      </div>
-
-      <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
-        <li>
-          <button
-            className={`nav-btn ${page === 'collection' ? 'active' : ''}`}
-            onClick={() => {
-              setPage('collection');
-              setMenuOpen(false);
-            }}
-          >
-            Collection
-          </button>
-        </li>
-        <li>
-          <button
-            className={`nav-btn ${page === 'story' ? 'active' : ''}`}
-            onClick={() => {
-              setPage('story');
-              setMenuOpen(false);
-            }}
-          >
-            Our Story
-          </button>
-        </li>
-        <li>
-          <button
-            className={`nav-btn ${page === 'contact' ? 'active' : ''}`}
-            onClick={() => {
-              setPage('contact');
-              setMenuOpen(false);
-            }}
-          >
-            Contact Us
-          </button>
-        </li>
-      </ul>
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <span className="nav-user">Hi, {user}</span>
-
-        <button className="nav-btn logout-btn" onClick={onLogout}>
-          Logout
-        </button>
-
-        <div className="cart-icon" onClick={() => setPage('cart')}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 01-8 0"/>
-          </svg>
-          {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
-        </div>
-
-        <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-          <span /><span /><span />
-        </button>
-      </div>
-    </nav>
-  );
-};
-
-// ─── HERO ────────────────────────────────────────────────────────────────────
-const Hero = ({ setPage }) => (
-  <section className="hero">
-    <div className="hero-overlay" />
-    <div className="hero-content">
-      <p className="hero-subtitle">Est. 1998 · Jaipur, India</p>
-      <h1>Elegance<br />is an Attitude</h1>
-      <p className="hero-desc">
-        Handcrafted jewelry designed for the modern muse.<br />
-        Timeless pieces that speak without words.
-      </p>
-      <div className="hero-btns">
-        <button className="btn btn-primary" onClick={() => setPage('collection')}>Discover Collection</button>
-        <button className="btn btn-outline" onClick={() => setPage('story')}>Our Story</button>
-      </div>
-    </div>
-  </section>
-);
-
-// ─── STATS BAR ───────────────────────────────────────────────────────────────
-const StatsBar = () => (
-  <div className="stats-bar">
-    {[
-      ["25+", "Years of Craftsmanship"],
-      ["10,000+", "Happy Customers"],
-      ["500+", "Unique Designs"],
-      ["100%", "Ethically Sourced"]
-    ].map(([num, label]) => (
-      <div className="stat-item" key={label}>
-        <span className="stat-number">{num}</span>
-        <span className="stat-label">{label}</span>
-      </div>
-    ))}
-  </div>
-);
-
-// ─── PRODUCT DETAILS MODAL ───────────────────────────────────────────────────
-const ProductDetails = ({ product, onClose, onAddToCart }) => {
-  if (!product) return null;
-
-  return (
-    <div className="product-modal-overlay" onClick={onClose}>
-      <div className="product-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={onClose}>×</button>
-
-        <div className="product-modal-content">
-          <img src={product.image} alt={product.name} className="product-modal-image" />
-
-          <div className="product-modal-info">
-            <p className="product-category">{product.category}</p>
-            <h2>{product.name}</h2>
-            <p>{product.description}</p>
-
-            <div className="product-detail-list">
-              <p><strong>Price:</strong> {formatINR(product.price)}</p>
-              <p><strong>Metal:</strong> {product.metal}</p>
-              <p><strong>Stone:</strong> {product.stone}</p>
-              <p><strong>Weight:</strong> {product.weight}</p>
-              <p><strong>SKU:</strong> {product.sku}</p>
-              <p><strong>Tag:</strong> {product.tag}</p>
-            </div>
-
-            <button className="btn btn-primary" onClick={() => onAddToCart(product)}>
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // ─── PRODUCT CARD ────────────────────────────────────────────────────────────
 const ProductCard = ({ product, onAddToCart, onViewDetails }) => (
@@ -578,25 +436,21 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar 
-        cartCount={cartCount} 
-        page={page} 
-        setPage={setPage} 
-        user={user} 
-        onLogout={handleLogout} 
+      <Navbar
+        cartCount={cartCount}
+        page={page}
+        setPage={setPage}
+        user={user}
+        onLogout={handleLogout}
       />
-      
+
       <main>
-        {page === 'home' && (
-          <HomePage setPage={setPage} onAddToCart={addToCart} />
-        )}
-        {page === 'collection' && (
-          <CollectionPage onAddToCart={addToCart} />
-        )}
+        {page === 'home' && <HomePage setPage={setPage} onAddToCart={addToCart} />}
+        {page === 'collection' && <CollectionPage onAddToCart={addToCart} />}
         {page === 'story' && <StoryPage />}
         {page === 'contact' && <ContactPage />}
         {page === 'cart' && (
-          <CartPage 
+          <CartPage
             cartItems={cartItems}
             onRemove={removeFromCart}
             onClearCart={clearCart}
@@ -604,7 +458,7 @@ function App() {
           />
         )}
       </main>
-      
+
       <Footer setPage={setPage} />
     </div>
   );
